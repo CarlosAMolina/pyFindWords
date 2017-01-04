@@ -15,14 +15,28 @@ def checkFiles (files2check):
             return -1
     return 1
 
-def getWordsList (fileWithWords):
+def getWordsList (fileWithWords,gettingWords2search=0):
     # input: fileWithWords - file name with its extension
     # output: list of words of the file
     fileContent = getFileContent(fileWithWords)
+    if gettingWords2search == 1:
+        showWords2searchAlert(fileContent)
     fileContent = noCharacters(fileContent)
     fileContent = fileContent.lower() # more searches if all words are lowercase
     wordsList = fileContent.split()
     return wordsList 
+
+def showWords2searchAlert(fileContent):
+    characters2avoid = [',',
+                        '.',
+                        '-',
+                        '_',
+                        ';',
+                        ':'] # characters that can reduce the results
+    for character2avoid in characters2avoid:
+        if character2avoid in fileContent:
+            print 'Alert: "' + character2avoid + '" was detected in the words you want to search, it can reduce the results'
+    print ''
 
 def avoidDuplicates(wordsList):
     # input: list of strings
@@ -45,8 +59,7 @@ def noCharacters(string2change):
                      'egnie':'\xc3\xb1',
                      'egNie':'\xc3\x91'}
     for character in dicCharacters:
-        string2change = string2change.replace(dicCharacters[character],character)
-        # character = key
+        string2change = string2change.replace(dicCharacters[character],character) # character = dictinary key
     return string2change
 
 def getFileContent (fileNameWithExtension):
@@ -117,7 +130,7 @@ if checkFiles(filesNames) == -1:
     print 'Check these files exist: '+ str(filesNames)
 else:
     wordsText = getWordsList(filesNames[1])
-    words2find = getWordsList(filesNames[0])
+    words2find = getWordsList(filesNames[0],1)
     words2find = avoidDuplicates(words2find)
     print 'Working with lowercase words and avoiding accents to improve results\n'
     results = checkWords(wordsText, words2find)
