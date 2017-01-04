@@ -24,6 +24,12 @@ def getWordsList (fileWithWords):
     wordsList = fileContent.split()
     return wordsList 
 
+def avoidDuplicates(wordsList):
+    # input: list of strings
+    # output: list of string without duplicates
+    wordsList = list(set(wordsList)) # note: order is altered
+    return wordsList
+
 def noCharacters(string2change):
     # more searches if accents and other characters are avoided
     dicCharacters = {'a':'\xc3\xa1',
@@ -84,6 +90,7 @@ if checkFiles(filesNames) == -1:
 else:
     wordsText = getWordsList(filesNames[1])
     words2find = getWordsList(filesNames[0])
+    words2find = avoidDuplicates(words2find)
     print 'Working with lowercase words and avoiding accents to improve results\n'
     results = checkWords(wordsText, words2find)
     showResults(results)
