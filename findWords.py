@@ -78,9 +78,37 @@ def checkWords (wordsOfTextWhereFind, words2find):
         result = {'word':0, 'numberOfSearchsExact':0, 'numberOfSearchsPartial':0, 'numberOfSearchsTotal':0} # necessary initialize the dictionary object
     return results
 
-def showResults (results):
+def showResults (results,showOption = 0):
+    if showOption == 0:  # separate results
+        resultsFinded, resultsNoFinded = separateResults(results)
+        print 'Words not found'
+        print '###############'
+        for result in resultsNoFinded:
+            showResult(result)
+        print '\nWords found'
+        print '###############'
+        for result in resultsFinded:
+            showResult(result)
+    elif showOption == 1: # show all results together
+        for result in results:
+            showResult(result)    
+
+def separateResults (results):
+    # save finded results in one list and no finded results in other list
+    resultsFinded = []
+    resultsNoFinded = []
     for result in results:
-        print result['word'] + ': ' + str(result['numberOfSearchsTotal']) + ' (' + str(result['numberOfSearchsExact']) + ' extact, ' + str(result['numberOfSearchsPartial']) + ' partial)' 
+        if result['numberOfSearchsTotal'] > 0:
+            resultsFinded.append(result)
+        else:
+            resultsNoFinded.append(result)
+    return resultsFinded, resultsNoFinded
+
+def showResult (result,showOption=0):
+    if showOption == 1:
+        print result['word'] + ': ' + str(result['numberOfSearchsTotal']) + ' (' + str(result['numberOfSearchsExact']) + ' extact, ' + str(result['numberOfSearchsPartial']) + ' partial)'
+    else:
+        print result['word'] + ': ' + str(result['numberOfSearchsTotal'])
 
 #main
 
