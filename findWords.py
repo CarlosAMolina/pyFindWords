@@ -89,39 +89,58 @@ def checkWords (wordsOfTextWhereFind, words2find):
         result['numberOfSearchsTotal'] =  result['numberOfSearchsExact'] + result['numberOfSearchsPartial']
         results.append(result)
         result = {'word':0, 'numberOfSearchsExact':0, 'numberOfSearchsPartial':0, 'numberOfSearchsTotal':0} # necessary initialize the dictionary object
-    return results
+    resultsSorted = sorted(results, key=lambda k: k['numberOfSearchsTotal']) #http://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
+    return resultsSorted # descending order
 
-def showResults (results,showOption = 0):
-    if showOption == 0:  # separate results
-        resultsFinded, resultsNoFinded = separateResults(results)
-        print 'Words not found'
-        print '###############'
-        for result in resultsNoFinded:
-            showResult(result)
-        print '\nWords found'
-        print '###############'
-        for result in resultsFinded:
-            showResult(result)
-    elif showOption == 1: # show all results together
-        for result in results:
-            showResult(result)    
+def showResults (results,showOption = 0, showExactPartial = 0):
+	# showOption = 1: show all results together
+	# showOption = 0: separate results: word founds and not found
+	# showExactPartial = 1: show number of total, exact and partial matches
+	# showExactPartial = 0: show only number of total matches
+	headers = ['Word', 'Total']
+	if showExactPartial == 1:
+		headers.append('Exact')
+		headers.append('Partial')
+	if showOption == 0:  # separate results
+		resultsFound, resultsNoFound = separateResults(results)
+		infoNoFound, colWidthNoFound = tableInfo (headers, resultsNoFound, showExactPartial)
+		infoFound, colWidthFound = tableInfo (headers, resultsFound, showExactPartial)
+		print 'Words not found'
+		print '#' * 40
+		showInfo (infoNoFound, colWidthNoFound)
+		print '\nWords found'
+		print '#' * 40
+		showInfo (infoFound, colWidthFound)
+	elif showOption == 1: # all results
+		info, colWidth = tableInfo (headers, results, showExactPartial)
+		showInfo (info, colWidth)
+
+def tableInfo (headers, results, showExactPartial):
+	info = []
+	info.append(headers)
+	for result in results:
+		if showExactPartial == 0:
+			result2info = [result['word'], result['numberOfSearchsTotal']]
+		elif showExactPartial == 1:
+			result2info = [result['word'], result['numberOfSearchsTotal'], result['numberOfSearchsExact'], result['numberOfSearchsPartial']]
+		info.append(result2info)
+	colWidth = max ( len(str(word)) for row in info for word in row ) + 3 # padding http://stackoverflow.com/questions/9989334/create-nice-column-output-in-python
+	return info, colWidth
 
 def separateResults (results):
-    # save finded results in one list and no finded results in other list
-    resultsFinded = []
-    resultsNoFinded = []
+    # save found results in one list and no found results in other list
+    resultsFound = []
+    resultsNoFound = []
     for result in results:
         if result['numberOfSearchsTotal'] > 0:
-            resultsFinded.append(result)
+            resultsFound.append(result)
         else:
-            resultsNoFinded.append(result)
-    return resultsFinded, resultsNoFinded
+            resultsNoFound.append(result)
+    return resultsFound, resultsNoFound
 
-def showResult (result,showOption=0):
-    if showOption == 1:
-        print result['word'] + ': ' + str(result['numberOfSearchsTotal']) + ' (' + str(result['numberOfSearchsExact']) + ' extact, ' + str(result['numberOfSearchsPartial']) + ' partial)'
-    else:
-        print result['word'] + ': ' + str(result['numberOfSearchsTotal'])
+def showInfo (info, col_width=0):
+	for row in info:
+		print ("".join(str(word).ljust(col_width) for word in row)) # str(): avoid error if word = None
 
 #main
 
@@ -134,4 +153,4 @@ else:
     words2find = avoidDuplicates(words2find)
     print 'Working with lowercase words and avoiding accents to improve results\n'
     results = checkWords(wordsText, words2find)
-    showResults(results)
+    showResults(results,0,0) # 0,1: separated results or together. 0,1: show only total matches or exact and partial matches too
