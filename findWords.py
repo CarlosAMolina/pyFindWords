@@ -18,7 +18,7 @@ show = Show()
 con = URLconnection()
 
 #main
-arguments = sys.argv # [-f=text/-w=web, url, tex2chekInWeb]
+arguments = sys.argv # [f=text/w=web, url, tex2chekInWeb]
 filesNames = get.getFilesNames(arguments)
 webHTML = None
 if filesNames[1] == 'web.html':
