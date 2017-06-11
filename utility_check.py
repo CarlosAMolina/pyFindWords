@@ -5,6 +5,15 @@ import sys, re
 
 class Check:
 
+	def __init__(self):
+		self.vowels = 'aeiou'
+
+	def checkArgumentsGiven (self, arguments):
+		if len(arguments) == 1:
+			return -1
+		else:
+			return 1
+
 	def checkStrIsInt(self, string, message=1):
 		try:
 			int(string)
@@ -12,6 +21,17 @@ class Check:
 		except:
 			if message == 1:
 				print 'Introduce a number'
+			return -1
+
+	def checkStrIsConsonant(self, string, message=1):
+		try:
+			if string not in self.vowels and len (string) == 1:
+				return 1
+			else:
+				if message == 1:
+					print 'Introduce a consonant'
+				return -1
+		except:
 			return -1
 
 	def checkFileExists(self, filePathAndName):
@@ -37,12 +57,13 @@ class Check:
 			return -1
 
 	def filesReady (self, filesNames):
-		if filesNames[1] == 'web.html':
-			if self.checkFiles(filesNames) == 1:
-				return 1
-		elif filesNames[1] == 'fileWhereFindWords.txt' and self.checkFiles(filesNames) == 1:
+		if len (filesNames) == 2 and filesNames[1] == 'web.html' and self.checkFiles(filesNames) == 1:
 			return 1
-		return -1
+		elif len(filesNames) == 1 and filesNames[0] == 'fileWhereFindWords.txt' and self.checkFiles(filesNames) == 1:
+			return 1
+		elif len(filesNames) == 2 and filesNames[1] == 'fileWhereFindWords.txt' and self.checkFiles(filesNames) == 1:
+			return 1
+		return -1 # bad fileName
 
 	def checkWordInText (self, wordsOfTextWhereFind, word2find):
 		numberOfChecksExact = 0
@@ -64,5 +85,4 @@ class Check:
 			result['numberOfSearchsTotal'] =  result['numberOfSearchsExact'] + result['numberOfSearchsPartial']
 			results.append(result)
 			result = {'word':0, 'numberOfSearchsExact':0, 'numberOfSearchsPartial':0, 'numberOfSearchsTotal':0} # necessary initialize the dictionary object
-		resultsSorted = sorted(results, key=lambda k: k['numberOfSearchsTotal']) #http://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
-		return resultsSorted # descending order
+		return results

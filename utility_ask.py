@@ -15,7 +15,7 @@ class Ask:
 
 	def ask4url(self):
 		url2study = ""
-		print '\nWrite the URL to study'
+		print '\nWrite the URL to study (format example: https://github.com/)'
 		while url2study == "":
 			url2study = raw_input ('>> ')
 		return url2study
@@ -28,6 +28,14 @@ class Ask:
 			number = self.askNumber()
 		return number
 
+	def ask4consonant(self):
+		# ask until the answer is a consonant
+		consonant = ''
+		while consonant == '':
+			#print 'Select consonant'
+			consonant = self.askConsonant()
+		return consonant
+
 	def askNumber(self):
 		# return number (type int) or '' (advising invalid syntax)
 		number = raw_input ('>> ') # string
@@ -37,6 +45,14 @@ class Ask:
 		else:
 			number = self.ch.convertString2Int(number)
 		return number
+
+	def askConsonant(self):
+		# return consonant (type str) or '' (advising invalid syntax)
+		consonant = raw_input ('>> ') # string
+		if self.ck.checkStrIsConsonant(consonant,0) == -1:
+			consonant = ''
+			print 'Invalid option'
+		return consonant
 
 	def askOverwriteFile(self, fileName):
 		print 'File ' +str(fileName)+ ' already exists'
@@ -49,10 +65,10 @@ class Ask:
 		return fileOptions
 
 	def askAnalyzeFileOrWeb (self):
-		print '\nSelect what to study:\n1. File fileWhereFindWords.txt \n2. URL'
-		whatAnalyze = ''
-		while whatAnalyze != 1 and whatAnalyze != 2:
-			whatAnalyze = self.ask4number()
+		print '\nSelect what to study:\n(f) File fileWhereFindWords.txt \n(r) Repeated words in file \n(w) URL'
+		whatAnalyze = 'x'
+		while whatAnalyze not in 'frw':
+			whatAnalyze = self.ask4consonant()
 		return whatAnalyze
 
 	def askWebText2check (self, web2check, arguments):

@@ -8,6 +8,11 @@ How it works:
 - fileWhereFindWords.txt: text where find desired words
 - web.html: you can analyze an URL instead of the .txt file. Web html code is saved in web.html
 
+Available options
+- f=file. Checks if words in wordsToFind.txt are in fileWhereFindWords.txt
+- r=repeated. Search in fileWhereFindWords.txt the number of times each word appears
+- w=web. Checks if words in wordsToFind.txt are in the specified web page. Web html code is saved in web.html
+
 Example
 - words2find.txt:
 

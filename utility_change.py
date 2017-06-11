@@ -33,3 +33,10 @@ class Change:
 		# output: type int
 		intConverted = int(string2convert)
 		return intConverted
+
+	def changeOrder(self, dictionary, key2order):
+		# type(key2order) = string
+		# key2order = 'word' -> alphabetical order
+		# key2order = 'numberOfSearchsTotal' -> descending order
+		result = sorted(dictionary, key=lambda k: k[key2order]) # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
+		return result
